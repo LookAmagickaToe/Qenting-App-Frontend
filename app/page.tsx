@@ -179,7 +179,9 @@ export default function Home() {
     };
   
     try {
-      const response = await fetch("qentin-app-production.up.railway.app/api/data", {
+      const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+
+      const response = await fetch(`${API_BASE_URL}/api/data`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
