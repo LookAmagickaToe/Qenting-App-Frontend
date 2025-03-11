@@ -66,7 +66,7 @@ export default function QuestionScreen({
       </div>
 
       <div className="w-32 h-32 mb-8 relative">
-        <Image src="/Qlogo.png" alt="Qentin Logo" fill className="object-contain" priority />
+        <Image src="/QLogo.png" alt="Qentin Logo" fill className="object-contain" priority />
       </div>
 
       <div className="flex flex-col items-center justify-center flex-grow w-full">
