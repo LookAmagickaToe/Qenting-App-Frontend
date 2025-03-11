@@ -179,8 +179,6 @@ export default function Home() {
     };
   
     try {
-";
-
       const response = await fetch("https://qentin-app-production.up.railway.app/api/data", {
         method: "POST",
         headers: {
