@@ -33,7 +33,12 @@ export default function Home() {
   const [exclusions, setExclusions] = useState<string[]>([])
   const [excludedActor, setExcludedActor] = useState<string>("")
   const [algorithmQuality, setAlgorithmQuality] = useState<number>(35)
-  const [recommendedMovies, setRecommendedMovies] = useState<string[]>([]) 
+  const [recommendedMovies, setRecommendedMovies] = useState<{
+    title: string;
+    genre: string;
+    poster: string | null;
+    overview: string;
+  }[]>([])
   const [loading, setLoading] = useState<boolean>(false);
   const [dataReceived, setDataReceived] = useState<boolean>(false);
 

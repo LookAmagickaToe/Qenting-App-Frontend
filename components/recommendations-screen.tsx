@@ -8,8 +8,13 @@ import { useState } from "react"
 interface RecommendationsScreenProps {
   onBack: () => void
   onRegenerate: () => void
-  recommendedMovies: string[]
-}
+  recommendedMovies: {
+    title: string;
+    genre: string;
+    poster: string | null;
+    overview: string;
+  }[]
+  }
 
 export default function RecommendationsScreen({
   onBack,
@@ -59,14 +64,35 @@ export default function RecommendationsScreen({
       </div>
 
       {/* Movie Title */}
-      <div className="text-3xl font-bold text-center mb-4">
-        {currentMovie || "Keine Empfehlung"}
+      <div className="text-3xl font-bold text-center mb-1">
+        {currentMovie?.title || "Keine Empfehlung"}
       </div>
 
-      {/* Image placeholder */}
-      <div className="w-full max-w-md h-[360px] bg-gray-800 rounded-xl mb-6 flex items-center justify-center">
-        <p className="text-gray-400 italic">Film-Bild folgt...</p>
+      {/* Movie Genre */}
+      <div className="text-md text-center text-gray-400 mb-4">
+        {currentMovie?.genre || "Genre unbekannt"}
       </div>
+
+
+      <div className="w-full max-w-md h-[360px] bg-gray-800 rounded-xl mb-4 flex items-center justify-center overflow-hidden">
+        {currentMovie?.poster ? (
+          <Image
+            src={currentMovie.poster}
+            alt={currentMovie.title}
+            width={500}
+            height={360}
+            className="object-contain rounded-xl"
+          />
+        ) : (
+          <p className="text-gray-400 italic">Kein Bild verfügbar</p>
+        )}
+      </div>
+      {currentMovie?.overview && (
+        <div className="w-full max-w-md h-[360px] bg-gray-900 rounded-xl px-4 py-3 mb-8 overflow-y-auto text-sm text-gray-300 text-center">
+          <p className="whitespace-pre-line">{currentMovie.overview}</p>
+        </div>
+      )}
+
 
       {/* Like/Dislike Buttons */}
       <div className="flex flex-col items-center w-full space-y-3 mb-6">
@@ -75,19 +101,19 @@ export default function RecommendationsScreen({
             variant="outline"
             className="bg-[#2a2a2a] text-white border-gray-600 hover:bg-[#444]"
           >
-            I don't like it
+            👎
           </Button>
           <Button
             variant="outline"
             className="bg-[#2a2a2a] text-white border-gray-600 hover:bg-[#444]"
           >
-            I watched & liked it
+            I watched & 👍
           </Button>
           <Button
             variant="outline"
             className="bg-[#2a2a2a] text-white border-gray-600 hover:bg-[#444]"
           >
-            I like it
+            👍
           </Button>
         </div>
       </div>

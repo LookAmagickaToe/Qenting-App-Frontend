@@ -14,7 +14,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    unoptimized: true,
+    domains: ['image.tmdb.org'],
   },
   experimental: {
     webpackBuildWorker: true,
