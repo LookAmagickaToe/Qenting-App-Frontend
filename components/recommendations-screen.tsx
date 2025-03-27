@@ -38,7 +38,7 @@ export default function RecommendationsScreen({
   const currentMovie = recommendedMovies[currentIndex]
 
   return (
-    <div className="flex flex-col items-center w-full h-screen px-6 pt-6 pb-24 text-white relative">
+    <div className="flex flex-col items-center w-full px-6 pt-6 pb-24 text-white relative">
       {/* Logo in top-right */}
       <div className="absolute top-4 right-4 w-10 h-10">
         <Image
@@ -74,21 +74,24 @@ export default function RecommendationsScreen({
       </div>
 
 
-      <div className="w-full max-w-md h-[360px] bg-gray-800 rounded-xl mb-4 flex items-center justify-center overflow-hidden">
+      <div className="h-[400px] flex items-center justify-center mb-4">
         {currentMovie?.poster ? (
-          <Image
+          <img
             src={currentMovie.poster}
             alt={currentMovie.title}
-            width={500}
-            height={360}
-            className="object-contain rounded-xl"
+            className="h-full w-auto rounded-xl"
           />
         ) : (
-          <p className="text-gray-400 italic">Kein Bild verfügbar</p>
+          <div className="h-full flex items-center justify-center text-gray-400 italic">
+            Kein Bild verfügbar
+          </div>
         )}
       </div>
+
+
+      {/* Movie Overview */}
       {currentMovie?.overview && (
-        <div className="w-full max-w-md h-[360px] bg-gray-900 rounded-xl px-4 py-3 mb-8 overflow-y-auto text-sm text-gray-300 text-center">
+        <div className="w-full max-w-md h-[150px] bg-gray-900 rounded-xl px-4 py-3 mb-8 overflow-y-auto text-sm text-gray-300 text-center">
           <p className="whitespace-pre-line">{currentMovie.overview}</p>
         </div>
       )}
