@@ -41,7 +41,7 @@ export default function ChatScreen({ onBack }: ChatScreenProps) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          client_id: "example-client-id", // Replace with actual UUID/session
+          client_id: "example-client-id", // Replace with actual session ID
           message: input
         })
       })
@@ -55,9 +55,10 @@ export default function ChatScreen({ onBack }: ChatScreenProps) {
   }
 
   return (
-    <div className="flex flex-col h-full w-full px-4 pt-4 pb-24 text-white relative">
-      {/* Top bar */}
-      <div className="absolute top-4 left-4">
+    <div className="flex flex-col h-screen w-full bg-gradient-to-b from-black to-[#001428] text-white">
+      
+      {/* Top Bar */}
+      <div className="flex items-center justify-between px-4 py-4">
         <Button
           variant="ghost"
           size="icon"
@@ -66,24 +67,26 @@ export default function ChatScreen({ onBack }: ChatScreenProps) {
         >
           <ArrowLeft className="h-6 w-6" />
         </Button>
-      </div>
-      <div className="absolute top-4 right-4 w-10 h-10">
-        <Image
-          src="/QLogo.png"
-          alt="Qentin Logo"
-          fill
-          className="object-contain"
-          priority
-        />
+        <div className="w-10 h-10 relative">
+          <Image
+            src="/QLogo.png"
+            alt="Qentin Logo"
+            fill
+            className="object-contain"
+            priority
+          />
+        </div>
       </div>
 
-      {/* Chat messages */}
-      <div className="flex-1 overflow-y-auto mt-16 mb-4 space-y-2 pr-2">
+      {/* Chat Area */}
+      <div className="flex-1 overflow-y-auto px-4 space-y-3 pb-32">
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`px-4 py-2 max-w-[75%] rounded-xl text-sm whitespace-pre-line ${
-              msg.sender === "user" ? "bg-blue-600 self-end" : "bg-gray-700 self-start"
+            className={`max-w-[75%] px-4 py-2 rounded-xl text-sm whitespace-pre-line ${
+              msg.sender === "user"
+                ? "bg-blue-600 self-end ml-auto"
+                : "bg-gray-700 self-start mr-auto"
             }`}
           >
             {msg.text}
@@ -92,8 +95,8 @@ export default function ChatScreen({ onBack }: ChatScreenProps) {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input bar */}
-      <div className="absolute bottom-0 left-0 right-0 p-4 bg-black border-t border-gray-800">
+      {/* Input Bar */}
+      <div className="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800 px-4 py-3">
         <div className="flex items-center gap-2">
           <input
             type="text"
