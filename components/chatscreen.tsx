@@ -54,9 +54,9 @@ export default function ChatScreen({ onBack, sessionId, setRecommendedMovies }: 
       })
   
       const data = await response.json()
-  
+      console.log("new recommendationss", data)
       if (data.movies) {
-        setRecommendedMovies(data.movies) // ✅ update Home-level state
+        setRecommendedMovies(data.movies)
       }
   
       const assistantMessage: ChatMessage = { sender: "assistant", text: data.reply }

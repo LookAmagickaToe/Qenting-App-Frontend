@@ -3,7 +3,7 @@
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight, ArrowLeft } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react" 
 import ChatScreen from "@/components/chatscreen"
 
 interface RecommendationsScreenProps {
@@ -18,6 +18,7 @@ interface RecommendationsScreenProps {
   sessionId: string
   setRecommendedMovies: (movies: any[]) => void
 }
+
 
 
 export default function RecommendationsScreen({
@@ -36,6 +37,10 @@ export default function RecommendationsScreen({
       setCurrentIndex(currentIndex - 1)
     }
   }
+  useEffect(() => {
+    // Reset to first movie when new recommendations arrive
+    setCurrentIndex(0)
+  }, [recommendedMovies])
 
   const goNext = () => {
     if (currentIndex < totalScreens - 1) {
