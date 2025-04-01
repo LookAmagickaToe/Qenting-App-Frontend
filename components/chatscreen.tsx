@@ -36,6 +36,10 @@ export default function ChatScreen({ onBack, sessionId}: ChatScreenProps) {
     setInput("")
 
     try {
+      console.log("🔍 Sending to backend:", {
+        session_id: sessionId,
+        message: input
+      })
       const response = await fetch("https://qentin-app-production.up.railway.app/api/chat", {
         method: "POST",
         headers: {
