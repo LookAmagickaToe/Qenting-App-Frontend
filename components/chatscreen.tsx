@@ -7,6 +7,7 @@ import { ArrowLeft } from "lucide-react"
 
 interface ChatScreenProps {
   onBack: () => void
+  sessionId: string
 }
 
 interface ChatMessage {
@@ -14,7 +15,7 @@ interface ChatMessage {
   text: string
 }
 
-export default function ChatScreen({ onBack }: ChatScreenProps) {
+export default function ChatScreen({ onBack, sessionId}: ChatScreenProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [input, setInput] = useState("")
   const messagesEndRef = useRef<HTMLDivElement | null>(null)
@@ -41,7 +42,7 @@ export default function ChatScreen({ onBack }: ChatScreenProps) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          client_id: "example-client-id", // Replace with actual session ID
+          session_id: sessionId,
           message: input
         })
       })
