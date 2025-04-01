@@ -4,17 +4,18 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight, ArrowLeft } from "lucide-react"
 import { useState } from "react"
+import ChatScreen from "@/components/chatscreen"
 
 interface RecommendationsScreenProps {
   onBack: () => void
   onRegenerate: () => void
   recommendedMovies: {
-    title: string;
-    genre: string;
-    poster: string | null;
-    overview: string;
+    title: string
+    genre: string
+    poster: string | null
+    overview: string
   }[]
-  }
+}
 
 export default function RecommendationsScreen({
   onBack,
@@ -22,6 +23,8 @@ export default function RecommendationsScreen({
   recommendedMovies
 }: RecommendationsScreenProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const totalScreens = recommendedMovies.length + 1 // extra screen for chat
+  const isChatScreen = currentIndex === recommendedMovies.length
 
   const goPrevious = () => {
     if (currentIndex > 0) {
@@ -30,12 +33,20 @@ export default function RecommendationsScreen({
   }
 
   const goNext = () => {
-    if (currentIndex < recommendedMovies.length - 1) {
+    if (currentIndex < totalScreens - 1) {
       setCurrentIndex(currentIndex + 1)
     }
   }
 
   const currentMovie = recommendedMovies[currentIndex]
+
+  if (isChatScreen) {
+    return (
+      <div className="w-full h-full">
+        <ChatScreen onBack={() => setCurrentIndex(currentIndex - 1)} />
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col items-center w-full px-6 pt-6 pb-24 text-white relative">
@@ -73,7 +84,6 @@ export default function RecommendationsScreen({
         {currentMovie?.genre || "Genre unbekannt"}
       </div>
 
-
       <div className="h-[400px] flex items-center justify-center mb-4">
         {currentMovie?.poster ? (
           <img
@@ -88,14 +98,12 @@ export default function RecommendationsScreen({
         )}
       </div>
 
-
       {/* Movie Overview */}
       {currentMovie?.overview && (
         <div className="w-full max-w-md h-[150px] bg-gray-900 rounded-xl px-4 py-3 mb-8 overflow-y-auto text-sm text-gray-300 text-center">
           <p className="whitespace-pre-line">{currentMovie.overview}</p>
         </div>
       )}
-
 
       {/* Like/Dislike Buttons */}
       <div className="flex flex-col items-center w-full space-y-3 mb-6">
@@ -124,7 +132,7 @@ export default function RecommendationsScreen({
       {/* Spacer to push arrows to the bottom */}
       <div className="flex-grow" />
 
-      {/* Navigation buttons at the very bottom */}
+      {/* Navigation buttons */}
       <div className="flex justify-between w-full max-w-md mt-auto mb-4">
         <Button
           onClick={goPrevious}
@@ -135,7 +143,7 @@ export default function RecommendationsScreen({
         </Button>
         <Button
           onClick={goNext}
-          disabled={currentIndex === recommendedMovies.length - 1}
+          disabled={currentIndex === totalScreens - 1}
           className="rounded-full px-4 py-2"
         >
           <ChevronRight className="h-6 w-6" />

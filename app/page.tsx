@@ -41,7 +41,7 @@ export default function Home() {
   }[]>([])
   const [loading, setLoading] = useState<boolean>(false);
   const [dataReceived, setDataReceived] = useState<boolean>(false);
-
+  const [sessionId, setSessionId] = useState<string | null>(null)
 
 
   const questions = [
@@ -167,24 +167,29 @@ export default function Home() {
     }
   }
   const sendDataToAPI = async () => {
-    // Construct a structured payload for questions and answers
+    if (!sessionId) {
+      console.error("No session ID available!");
+      return;
+    }
+  
     const formattedAnswers = questions.map((q, index) => ({
       questionText: q.text,
-      rating: answers[index + 1] ?? null, // Use index + 1 to match question numbering
+      rating: answers[index + 1] ?? null,
     }));
   
     const payload = {
       streamingServices: selectedServices,
       gender: selectedGender,
       birthYear: birthYear,
-      answers: formattedAnswers, // Now includes question text and rating
+      answers: formattedAnswers,
       exclusions: exclusions,
       excludedActor: excludedActor,
       algorithmQuality: algorithmQuality,
     };
   
     try {
-      const response = await fetch("https://qentin-app-production.up.railway.app/api/data", {
+      // Step 1: POST user data
+      const postResponse = await fetch(`https://qentin-app-production.up.railway.app/api/data/${sessionId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -192,22 +197,20 @@ export default function Home() {
         body: JSON.stringify(payload),
       });
   
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
+      if (!postResponse.ok) throw new Error(`POST failed: ${postResponse.status}`);
   
-      const result = await response.json();
-      console.log("API Response:", result);
+      // Step 2: GET recommendations
+      const getResponse = await fetch(`https://qentin-app-production.up.railway.app/api/data/${sessionId}/recommendations`);
+      if (!getResponse.ok) throw new Error(`GET failed: ${getResponse.status}`);
   
-      // ✅ Store the received movie list in state
+      const result = await getResponse.json();
+      console.log("🎬 Recommendations received:", result);
+  
       setRecommendedMovies(result.movies);
-  
-      // ✅ Mark data as received
       setDataReceived(true);
-  
     } catch (error) {
-      console.error("Error sending data to API:", error);
-      alert("Fehler beim Senden der Daten. Bitte versuche es erneut.");
+      console.error("❌ Error during data + recommendations fetch:", error);
+      alert("Fehler beim Senden oder Abrufen der Daten. Bitte versuche es erneut.");
     }
   };
   
@@ -216,7 +219,11 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-black to-[#001428]">
-      {currentScreen === "welcome" && <WelcomeScreen onContinue={handleWelcomeClick} />}
+      {currentScreen === "welcome" && ( <WelcomeScreen
+          onContinue={handleWelcomeClick}
+          onSessionCreated={(id) => setSessionId(id)}
+        />
+      )}
 
       {currentScreen === "streaming" && <StreamingServicesScreen onNext={handleServicesNext} />}
 
