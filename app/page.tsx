@@ -288,8 +288,8 @@ export default function Home() {
         <RecommendationsScreen
           recommendedMovies={recommendedMovies}
           onBack={handleBack}
-          quality={algorithmQuality}
           onRegenerate={handleRegenerateRecommendations}
+          sessionId={sessionId!} // ✅ the '!' tells TypeScript: I promise it's not null
         />
       )}
 

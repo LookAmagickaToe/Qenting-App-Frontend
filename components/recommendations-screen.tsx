@@ -15,12 +15,14 @@ interface RecommendationsScreenProps {
     poster: string | null
     overview: string
   }[]
+  sessionId: string
 }
 
 export default function RecommendationsScreen({
   onBack,
   onRegenerate,
-  recommendedMovies
+  recommendedMovies,
+  sessionId
 }: RecommendationsScreenProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const totalScreens = recommendedMovies.length + 1 // extra screen for chat
@@ -43,7 +45,9 @@ export default function RecommendationsScreen({
   if (isChatScreen) {
     return (
       <div className="w-full h-full">
-        <ChatScreen onBack={() => setCurrentIndex(currentIndex - 1)} />
+        <ChatScreen 
+        sessionId={sessionId} 
+        onBack={() => setCurrentIndex(currentIndex - 1)}  />
       </div>
     )
   }
