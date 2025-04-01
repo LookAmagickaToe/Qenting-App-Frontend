@@ -10,6 +10,8 @@ import QuestionScreen from "@/components/question-screen"
 import ExclusionScreen from "@/components/exclusion-screen"
 import CalculatingScreen from "@/components/calculating-screen"
 import RecommendationsScreen from "@/components/recommendations-screen"
+import ChatScreen from "@/components/chatscreen"
+
 
 export default function Home() {
   const [currentScreen, setCurrentScreen] = useState<
@@ -22,6 +24,7 @@ export default function Home() {
     | "exclusions"
     | "calculating"
     | "recommendations"
+    | "chat"
   >("welcome")
 
   const [selectedServices, setSelectedServices] = useState<string[]>([])
@@ -289,9 +292,18 @@ export default function Home() {
           recommendedMovies={recommendedMovies}
           onBack={handleBack}
           onRegenerate={handleRegenerateRecommendations}
-          sessionId={sessionId!} // ✅ the '!' tells TypeScript: I promise it's not null
+          sessionId={sessionId!}
+          setRecommendedMovies={setRecommendedMovies}
         />
       )}
+      {currentScreen === "chat" && (
+        <ChatScreen
+          sessionId={sessionId!}
+          onBack={() => setCurrentScreen("recommendations")}
+          setRecommendedMovies={setRecommendedMovies}
+        />
+      )}
+
 
 
     </main>

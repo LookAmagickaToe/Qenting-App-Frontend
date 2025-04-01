@@ -6,8 +6,14 @@ import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
 
 interface ChatScreenProps {
-  onBack: () => void
   sessionId: string
+  onBack: () => void
+  setRecommendedMovies: (movies: {
+    title: string
+    genre: string
+    poster: string | null
+    overview: string
+  }[]) => void
 }
 
 interface ChatMessage {
@@ -15,7 +21,7 @@ interface ChatMessage {
   text: string
 }
 
-export default function ChatScreen({ onBack, sessionId}: ChatScreenProps) {
+export default function ChatScreen({ onBack, sessionId, setRecommendedMovies }: ChatScreenProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [input, setInput] = useState("")
   const messagesEndRef = useRef<HTMLDivElement | null>(null)
@@ -30,16 +36,12 @@ export default function ChatScreen({ onBack, sessionId}: ChatScreenProps) {
 
   const sendMessage = async () => {
     if (!input.trim()) return
-
+  
     const userMessage: ChatMessage = { sender: "user", text: input }
     setMessages(prev => [...prev, userMessage])
     setInput("")
-
+  
     try {
-      console.log("🔍 Sending to backend:", {
-        session_id: sessionId,
-        message: input
-      })
       const response = await fetch("https://qentin-app-production.up.railway.app/api/chat", {
         method: "POST",
         headers: {
@@ -50,14 +52,21 @@ export default function ChatScreen({ onBack, sessionId}: ChatScreenProps) {
           message: input
         })
       })
-
+  
       const data = await response.json()
+  
+      if (data.movies) {
+        setRecommendedMovies(data.movies) // ✅ update Home-level state
+      }
+  
       const assistantMessage: ChatMessage = { sender: "assistant", text: data.reply }
       setMessages(prev => [...prev, assistantMessage])
     } catch (error) {
       console.error("Error sending message:", error)
     }
   }
+  
+  
 
   return (
     <div className="flex flex-col h-screen w-full bg-gradient-to-b from-black to-[#001428] text-white">

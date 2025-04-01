@@ -16,12 +16,15 @@ interface RecommendationsScreenProps {
     overview: string
   }[]
   sessionId: string
+  setRecommendedMovies: (movies: any[]) => void
 }
+
 
 export default function RecommendationsScreen({
   onBack,
   onRegenerate,
   recommendedMovies,
+  setRecommendedMovies,
   sessionId
 }: RecommendationsScreenProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -46,8 +49,11 @@ export default function RecommendationsScreen({
     return (
       <div className="w-full h-full">
         <ChatScreen 
-        sessionId={sessionId} 
-        onBack={() => setCurrentIndex(currentIndex - 1)}  />
+          sessionId={sessionId}
+          onBack={() => setCurrentIndex(currentIndex - 1)}
+          setRecommendedMovies={setRecommendedMovies}
+        />
+
       </div>
     )
   }
