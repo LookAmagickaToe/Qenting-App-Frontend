@@ -35,7 +35,7 @@ export default function ChatScreen({ onBack }: ChatScreenProps) {
     setInput("")
 
     try {
-      const response = await fetch("/api/chat", {
+      const response = await fetch("https://qentin-app-production.up.railway.app/api/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
